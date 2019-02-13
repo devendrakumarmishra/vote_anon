@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Vote Anon module install/schema/update hooks.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Config\Entity\ConfigEntityStorage;
+
+/**
+ * Implements hook_schema().
+ */
+function vote_anon_schema() {
+  $schema = [];
+
+  $schema['vote_anon_counts'] = [
+    'description' => 'The number of times an entity has been voted.',
+    'fields' => [
+      'vote_id' => [
+        'type' => 'serial',
+        'length' => 11,
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ],
+      'entity_type' => [
+        'description' => 'The vote type, like "node", "comment", or "user".',
+        'type' => 'varchar_ascii',
+        'length' => EntityTypeInterface::ID_MAX_LENGTH,
+        'not null' => TRUE,
+      ],
+      'entity_id' => [
+        'description' => 'The unique ID of the voted entity, for example the uid, cid, or nid.',
+        'type' => 'int',
+        'length' => 11,
+        'unsigned' => TRUE,
+      ],
+      'count' => [
+        'description' => 'The number of times this object has been voted for this vote.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
+      'last_updated' => [
+        'description' => 'The UNIX time stamp representing when the vote was last updated.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'disp-size' => 11,
+      ],
+    ],
+    'primary key' => ['vote_id', 'entity_id'],
+    'indexes' => [
+      'vote_id_entity_type' => ['vote_id', 'entity_type'],
+      'entity_type_entity_id' => ['entity_type', 'entity_id'],
+      'vote_id_count' => ['vote_id', 'count'],
+      'vote_id_last_updated' => ['vote_id', 'last_updated'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function vote_anon_uninstall() {
+  drupal_set_message(t('Vote has been uninstalled.'));
+}
