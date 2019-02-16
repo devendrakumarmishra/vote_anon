@@ -7,6 +7,16 @@ vote_anon.vote_ajax_link:
     node: \d+
   requirements:
     _permission: 'access content'
+
+vote_anon.vote_ajax_link_single_node:
+  path: '/nodevote/{node}/{nojs}'
+  defaults:
+    _controller: '\Drupal\vote_anon\Controller\SingleNodeVoteAjaxController::renderSingleNodeVoteLinkRenderable'
+    _title: 'Vote Ajax Link'
+    nojs: 'nojs'
+    node: \d+
+  requirements:
+    _permission: 'access content'
     
 vote_anon.vote_ajax_votecount:
   path: '/vote_anon/voteCount'
@@ -20,7 +30,7 @@ vote_anon.vote_configuration_form:
   path: '/admin/config/vote_anon/voteconfiguration'
   defaults:
     _form: '\Drupal\vote_anon\Form\VoteConfigurationForm'
-    _title: 'VoteConfigurationForm'
+    _title: 'Voting Configuration Form'
   requirements:
     _permission: 'access administration pages'
   options:

@@ -93,19 +93,31 @@ function vote_anon_preprocess_node(&$variables) {
  * Implements hook_ENTITY_TYPE_view().
  */
 function vote_anon_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  $build['vote_ajax_link'] = [
-    '#type' => 'link',
-    '#title' => t('Vote for @title', array('@title' => $entity->getTitle())),
-    '#attached' => ['library' => ['core/drupal.ajax']],
-    '#attributes' => ['class' => ['use-ajax']],
-    '#url' => Url::fromRoute('vote_anon.vote_ajax_link', ['nojs' => 'ajax','node' => $entity->id()]),
-    '#prefix' => '<div class="votelink btn btn-info">',
-    '#suffix' => '</div>',
-  ];
-  $build['vote_ajax_link']['destination'] = [
-    '#type' => 'container',
-    '#attributes' => ['id' => ["votedestinationdiv{$entity->id()}"], 'class' => 'btn'],
-  ];
+  $config = \Drupal::config('vote_anon.voteconfiguration');
+  $cookie = $config->get('voting_cookie');
+  $single_node_voting = $config->get('single_node_voting');
+  $diable_vote_link = $config->get('diable_vote_link');
+  $vote_content_type = $config->get('vote_content_type');
+  if ($vote_content_type == $entity->getType()) {
+    $voting_link = ($single_node_voting) ? 'vote_anon.vote_ajax_link_single_node' : 'vote_anon.vote_ajax_link';
+    $build['vote_ajax_link'] = [
+      '#type' => 'link',
+      '#title' => t('Vote for @title', array('@title' => $entity->getTitle())),
+      '#attached' => ['library' => ['core/drupal.ajax']],
+      '#attributes' => ['class' => ['use-ajax']],
+      '#url' => Url::fromRoute($voting_link, ['nojs' => 'ajax','node' => $entity->id()]),
+      '#prefix' => '<div class="voting-link voting-link-'.$entity->id().' btn btn-info">',
+      '#suffix' => '</div>',
+    ];
+    $build['vote_ajax_link']['destination'] = [
+      '#type' => 'container',
+      '#attributes' => ['id' => ["votedestinationdiv{$entity->id()}"], 'class' => 'btn'],
+    ];
+    $build['#cache']['max-age'] = 0;
+    if($diable_vote_link) {
+      $build['#attached']['library'][] = 'vote_anon/vote_anon.disablevoteajaxlink';
+    }
+  }
 }
 
 

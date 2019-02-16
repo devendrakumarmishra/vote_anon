@@ -24,13 +24,13 @@ function vote_anon_schema() {
         'unsigned' => TRUE,
       ],
       'entity_type' => [
-        'description' => 'The vote type, like "node", "comment", or "user".',
+        'description' => 'The vote type "node".',
         'type' => 'varchar_ascii',
-        'length' => EntityTypeInterface::ID_MAX_LENGTH,
+        'length' => 255,
         'not null' => TRUE,
       ],
       'entity_id' => [
-        'description' => 'The unique ID of the voted entity, for example the uid, cid, or nid.',
+        'description' => 'The unique ID of the voted entity, for nid.',
         'type' => 'int',
         'length' => 11,
         'unsigned' => TRUE,
@@ -55,6 +55,55 @@ function vote_anon_schema() {
       'vote_id_last_updated' => ['vote_id', 'last_updated'],
     ],
   ];
+  
+  $schema['vote_anon'] = [
+    'description' => 'Vote per node listing.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'length' => 11,
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'User Id.',
+        'type' => 'int',
+        'length' => 11,
+        'unsigned' => TRUE,
+      ],
+      'uuid' => [
+        'description' => 'UUID.',
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'entity_type' => [
+        'description' => 'The vote type "node".',
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'entity_id' => [
+        'description' => 'The unique ID of the voted entity nid.',
+        'type' => 'int',
+        'length' => 11,
+        'unsigned' => TRUE,
+      ],
+      'session_id' => [
+        'description' => 'Session ID.',
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'description' => 'The UNIX time stamp representing when the vote was last updated.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'disp-size' => 11,
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
 
   return $schema;
 }
@@ -63,5 +112,7 @@ function vote_anon_schema() {
  * Implements hook_uninstall().
  */
 function vote_anon_uninstall() {
+  // Remove views on module disable
+  Drupal::configFactory()->getEditable('views.view.vote_count')->delete();
   drupal_set_message(t('Vote has been uninstalled.'));
 }

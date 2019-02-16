@@ -1,5 +1,4 @@
 <?php
-
 namespace Drupal\vote_anon\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
@@ -32,6 +31,7 @@ class VoteAjaxController extends ControllerBase {
     if ($nojs == 'ajax') {
       $config = \Drupal::config('vote_anon.voteconfiguration');
       $cookie = $config->get('voting_cookie');
+      $diable_vote_link = $config->get('diable_vote_link');
       if (!isset($_COOKIE[$cookie])) {
         $vote_id = \Drupal::database()->select('vote_anon_counts', 'vote')
           ->fields('vote', ['vote_id'])
@@ -64,7 +64,10 @@ class VoteAjaxController extends ControllerBase {
       }
       $response = new AjaxResponse();
       $response->addCommand(new ReplaceCommand("#votedestinationdiv{$node}", $output));
-      $response->addCommand(new InvokeCommand(NULL, 'disableVoteLinks', ['/']));
+      // Diable vote link
+      if($diable_vote_link) {
+        $response->addCommand(new InvokeCommand(NULL, 'disableVoteLinks', ['/']));
+      }
       return $response;
     }
   }
