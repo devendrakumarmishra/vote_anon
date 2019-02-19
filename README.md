@@ -10,21 +10,20 @@ Contents:
 Introduction
 ------------
 
-The Vote Anonymous module allows you to setup voting feature for anonymous users on
-node entity type. Sometime we have requirement that anonymous user can vote only once among the nodes listing or only one vote for one node. Using this module we can manage voting functionality very easily. There is an admin setting page where we can configure messages, cookie, content type & other settings. On the basis of user cookie we can controlle the voting entry in database.
+The Vote Anonymous module allows you to set up the voting feature for anonymous users on the node entity type. Sometimes we have the requirement that anonymous user can vote only once among the nodes listing or only one vote per node. Using this module we can manage voting functionality very easily. There is an admin setting page where we can configure messages, cookie, content type & other settings. On the basis of the user cookie, we can control the voting entry in the database.
 
-If session/cookie already exist then module display a message that 'You have already submitted!'. We can also disable voting link from admin configuration if user has already voted.
+If session/cookie already exist then module display a message that 'You have already submitted!'. We can also disable voting link from admin configuration if the user has already voted.
 
-Voting can be configure on global level or individual node level. 
+Voting can be configured on a global level or individual node level. 
 
-For global level voting, keep uncheck "Single Node Voting". Now a user cannot vote on any node if already voted even at single node of select content type.
+For global level voting, keep unchecking "Single Node Voting". Now a user cannot vote on any node if already voted even a single node of select content type.
 
 For node level voting, keep checked "Single Node Voting". Now a user can vote on the node if not voted yet.
 
 History and Maintainers
 -----------------------
 
-There are other contrib modules which also provide voting feature but this one is easy to implement on node listing as well node page so I have developed & will keep improving.
+There are other contrib modules available which also provide the voting feature but this one is easy to implement on node listing as well as on node page, that's why I have developed it & I will keep improving it.
 
 Current Vote Anonymous Maintainers:
  * Devendra Kumar Mishra
